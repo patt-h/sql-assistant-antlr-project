@@ -4,8 +4,9 @@ options { tokenVocab=SQLQueryLexer; }
 
 query: POKAZ selectClause Z tableName (GDZIE condition)?;
 
-selectClause: function LPAREN column RPAREN | column | WSZYSTKO;
-function: SUM | AVG | COUNT | MAX | MIN;
+selectClause: function | columnList | WSZYSTKO;
+columnList: column (COMMA column)*;
+function: (SUM | AVG | COUNT | MAX | MIN) LPAREN column RPAREN;
 column: WORD;
 tableName: WORD;
 condition:

@@ -1,15 +1,10 @@
 package com.example.antlr_sql_project;
 
 public class SQLVisitor extends SQLQueryParserBaseVisitor<String> {
-    private String tableName; // Przechowywanie nazwy tabeli
 
     @Override
     public String visitTableName(SQLQueryParser.TableNameContext ctx) {
         return ctx.getText();
-    }
-
-    public String getTableName() {
-        return tableName;
     }
 
     @Override
@@ -23,7 +18,25 @@ public class SQLVisitor extends SQLQueryParserBaseVisitor<String> {
 
     @Override
     public String visitSelectClause(SQLQueryParser.SelectClauseContext ctx) {
-        return ctx.getText();
+        if (ctx.function() != null) {
+            return visit(ctx.function());
+        } else if (ctx.columnList() != null) {
+            StringBuilder columns = new StringBuilder();
+            for (SQLQueryParser.ColumnContext columnCtx : ctx.columnList().column()) {
+                columns.append(columnCtx.getText()).append(", ");
+            }
+            return columns.length() > 0 ? columns.substring(0, columns.length() - 2) : ""; // Usuwa ostatni przecinek
+        } else if (ctx.WSZYSTKO() != null) {
+            return "*";
+        }
+        return "";
+    }
+
+    @Override
+    public String visitFunction(SQLQueryParser.FunctionContext ctx) {
+        String functionName = ctx.getChild(0).getText();
+        String columnName = ctx.column().getText();
+        return functionName + "(" + columnName + ")";
     }
 
     public String visitCondition(SQLQueryParser.ConditionContext ctx) {

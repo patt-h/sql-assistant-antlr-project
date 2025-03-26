@@ -41,6 +41,18 @@ public class SQLQueryParserBaseListener implements SQLQueryParserListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
+	@Override public void enterColumnList(SQLQueryParser.ColumnListContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitColumnList(SQLQueryParser.ColumnListContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
 	@Override public void enterFunction(SQLQueryParser.FunctionContext ctx) { }
 	/**
 	 * {@inheritDoc}

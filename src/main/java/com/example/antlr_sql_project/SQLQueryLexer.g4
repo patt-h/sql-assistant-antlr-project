@@ -14,6 +14,7 @@ AVG: 'AVG';
 COUNT: 'COUNT';
 MAX: 'MAX';
 MIN: 'MIN';
+COMMA: ',';
 
 WORD: [a-zA-Z_][a-zA-Z_0-9]*;
 NUMBER: [0-9]+;

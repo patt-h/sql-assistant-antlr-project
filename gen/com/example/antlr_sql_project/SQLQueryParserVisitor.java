@@ -23,6 +23,12 @@ public interface SQLQueryParserVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitSelectClause(SQLQueryParser.SelectClauseContext ctx);
 	/**
+	 * Visit a parse tree produced by {@link SQLQueryParser#columnList}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitColumnList(SQLQueryParser.ColumnListContext ctx);
+	/**
 	 * Visit a parse tree produced by {@link SQLQueryParser#function}.
 	 * @param ctx the parse tree
 	 * @return the visitor result

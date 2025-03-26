@@ -1,7 +1,6 @@
 package com.example.antlr_sql_project.Service;
 
 import com.example.antlr_sql_project.ColumnMapperLexer;
-import com.example.antlr_sql_project.Repository.ProductRepository;
 import com.example.antlr_sql_project.SQLQueryLexer;
 import com.example.antlr_sql_project.SQLQueryParser;
 import com.example.antlr_sql_project.SQLVisitor;
@@ -31,7 +30,6 @@ public class QueryService {
         CommonTokenStream tokens = new CommonTokenStream(lexer);
         tokens.fill();
 
-
         // Tworzenie nowego zapytania SQL
         StringBuilder mappedQuery = new StringBuilder();
         for (Token token : tokens.getTokens()) {
@@ -50,6 +48,8 @@ public class QueryService {
         String sql = visitor.visit(tree);
         String tableName = visitor.visitTableName(tree.tableName());
         List<String> columnNames = getColumnNames(tableName);
+
+        System.out.println(sql);
 
         Query query = entityManager.createNativeQuery(sql);
         List<?> resultList = query.getResultList();

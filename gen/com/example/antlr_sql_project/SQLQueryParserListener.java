@@ -28,6 +28,16 @@ public interface SQLQueryParserListener extends ParseTreeListener {
 	 */
 	void exitSelectClause(SQLQueryParser.SelectClauseContext ctx);
 	/**
+	 * Enter a parse tree produced by {@link SQLQueryParser#columnList}.
+	 * @param ctx the parse tree
+	 */
+	void enterColumnList(SQLQueryParser.ColumnListContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link SQLQueryParser#columnList}.
+	 * @param ctx the parse tree
+	 */
+	void exitColumnList(SQLQueryParser.ColumnListContext ctx);
+	/**
 	 * Enter a parse tree produced by {@link SQLQueryParser#function}.
 	 * @param ctx the parse tree
 	 */

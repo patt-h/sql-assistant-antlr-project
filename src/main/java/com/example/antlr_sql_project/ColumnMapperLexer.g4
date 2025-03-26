@@ -13,9 +13,11 @@ MAX: 'MAX';
 MIN: 'MIN';
 LPAREN: '(';
 RPAREN: ')';
+COMMA: ',';
 
 WORD: 'cena'   { setText("price"); }
     | 'kategoria' { setText("category"); }
+    | 'nazwa' { setText("name"); }
     | [a-zA-Z_][a-zA-Z_0-9]*;
 
 NUMBER: [0-9]+;
