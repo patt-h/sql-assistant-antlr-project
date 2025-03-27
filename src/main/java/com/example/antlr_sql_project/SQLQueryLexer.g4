@@ -1,7 +1,7 @@
 lexer grammar SQLQueryLexer;
 
 POKAZ: 'Pokaz';
-WSZYSTKO: 'wszystko' { setText("*"); };
+WSZYSTKO: 'wszystko';
 Z: 'z';
 GDZIE: 'gdzie';
 I: 'i';
@@ -16,8 +16,8 @@ MAX: 'MAX';
 MIN: 'MIN';
 COMMA: ',';
 DOT: '.';
-DODAJ: 'dodaj';   // JOIN
-ON: 'warunek';    // ON
+DODAJ: 'dodaj';
+ON: 'warunek';
 
 WORD: [a-zA-Z_][a-zA-Z_0-9]*;
 NUMBER: [0-9]+;

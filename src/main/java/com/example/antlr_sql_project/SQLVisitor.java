@@ -4,7 +4,24 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class SQLVisitor extends SQLQueryParserBaseVisitor<String> {
-    private String mainTable;
+    private String tableName;
+
+    @Override
+    public String visitQuery(SQLQueryParser.QueryContext ctx) {
+        String mainTableName = ctx.tableName().getText();
+        tableName = mainTableName;
+        String selectClause = visitSelectClause(ctx.selectClause());
+        String joinClause = ctx.joinClause() != null ? visitJoinClause(ctx.joinClause()) : "";
+        String whereClause = ctx.condition() != null ? " WHERE " + visitCondition(ctx.condition()) : "";
+
+        if (ctx.joinClause() != null) {
+            tableName = ctx.joinClause().tableName().getText();
+            String selectFromJoinClause = ", " + visitSelectFromJoin(ctx.joinClause());
+            return String.format("SELECT %s%s FROM %s%s%s", selectClause, selectFromJoinClause, mainTableName, joinClause, whereClause).trim();
+        }
+
+        return String.format("SELECT %s FROM %s%s", selectClause, mainTableName, whereClause).trim();
+    }
 
     @Override
     public String visitTableName(SQLQueryParser.TableNameContext ctx) {
@@ -12,26 +29,9 @@ public class SQLVisitor extends SQLQueryParserBaseVisitor<String> {
     }
 
     @Override
-    public String visitQuery(SQLQueryParser.QueryContext ctx) {
-        String tableName = ctx.tableName().getText();
-        mainTable = tableName;
-        String selectClause = visitSelectClause(ctx.selectClause());
-        String joinClause = ctx.joinClause() != null ? visitJoinClause(ctx.joinClause()) : "";
-        String whereClause = ctx.condition() != null ? " WHERE " + visitCondition(ctx.condition()) : "";
-
-        if (ctx.joinClause() != null) {
-            mainTable = ctx.joinClause().tableName().getText();
-            String selectFromJoinClause = ", " + visitSelectFromJoin(ctx.joinClause());
-            return String.format("SELECT %s%s FROM %s%s%s", selectClause, selectFromJoinClause, tableName, joinClause, whereClause).trim();
-        }
-
-        return String.format("SELECT %s FROM %s%s%s", selectClause, tableName, joinClause, whereClause).trim();
-    }
-
-    @Override
     public String visitSelectClause(SQLQueryParser.SelectClauseContext ctx) {
         if (ctx.WSZYSTKO() != null) {
-            return "*";  // Zamiana * na wszystkie kolumny
+            return tableName + ".*";
         } else {
             return visitColumnList(ctx.columnList());
         }
@@ -41,7 +41,7 @@ public class SQLVisitor extends SQLQueryParserBaseVisitor<String> {
     public String visitColumnList(SQLQueryParser.ColumnListContext ctx) {
         List<String> columns = new ArrayList<>();
         for (SQLQueryParser.ColumnContext columnContext : ctx.column()) {
-            columns.add(mainTable + "." + columnContext.getText());
+            columns.add(tableName + "." + columnContext.getText());
         }
         return String.join(", ", columns);
     }
@@ -55,13 +55,6 @@ public class SQLVisitor extends SQLQueryParserBaseVisitor<String> {
         String tableName = ctx.tableName().getText();
         String condition = visitCondition(ctx.condition());
         return " JOIN " + tableName + " ON " + condition;
-    }
-
-    @Override
-    public String visitOnOperator(SQLQueryParser.OnOperatorContext ctx) {
-        return ctx.tableName(0).getText() + "." + ctx.column(0).getText() + " " +
-                ctx.OPERATOR().getText() + " " +
-                ctx.tableName(1).getText() + "." + ctx.column(1).getText();
     }
 
     @Override
@@ -97,6 +90,13 @@ public class SQLVisitor extends SQLQueryParserBaseVisitor<String> {
     @Override
     public String visitOrCondition(SQLQueryParser.OrConditionContext ctx) {
         return visitCondition(ctx.condition(0)) + " OR " + visitCondition(ctx.condition(1));
+    }
+
+    @Override
+    public String visitOnOperator(SQLQueryParser.OnOperatorContext ctx) {
+        return ctx.tableName(0).getText() + "." + ctx.column(0).getText() + " " +
+                ctx.OPERATOR().getText() + " " +
+                ctx.tableName(1).getText() + "." + ctx.column(1).getText();
     }
 
     @Override
