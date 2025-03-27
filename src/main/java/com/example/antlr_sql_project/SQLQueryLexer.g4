@@ -15,6 +15,9 @@ COUNT: 'COUNT';
 MAX: 'MAX';
 MIN: 'MIN';
 COMMA: ',';
+DOT: '.';
+DODAJ: 'dodaj';   // JOIN
+ON: 'warunek';    // ON
 
 WORD: [a-zA-Z_][a-zA-Z_0-9]*;
 NUMBER: [0-9]+;

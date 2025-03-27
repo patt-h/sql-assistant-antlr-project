@@ -28,6 +28,16 @@ public interface SQLQueryParserListener extends ParseTreeListener {
 	 */
 	void exitSelectClause(SQLQueryParser.SelectClauseContext ctx);
 	/**
+	 * Enter a parse tree produced by {@link SQLQueryParser#joinClause}.
+	 * @param ctx the parse tree
+	 */
+	void enterJoinClause(SQLQueryParser.JoinClauseContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link SQLQueryParser#joinClause}.
+	 * @param ctx the parse tree
+	 */
+	void exitJoinClause(SQLQueryParser.JoinClauseContext ctx);
+	/**
 	 * Enter a parse tree produced by {@link SQLQueryParser#columnList}.
 	 * @param ctx the parse tree
 	 */
@@ -79,6 +89,18 @@ public interface SQLQueryParserListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitSimpleCondition(SQLQueryParser.SimpleConditionContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code OnOperator}
+	 * labeled alternative in {@link SQLQueryParser#condition}.
+	 * @param ctx the parse tree
+	 */
+	void enterOnOperator(SQLQueryParser.OnOperatorContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code OnOperator}
+	 * labeled alternative in {@link SQLQueryParser#condition}.
+	 * @param ctx the parse tree
+	 */
+	void exitOnOperator(SQLQueryParser.OnOperatorContext ctx);
 	/**
 	 * Enter a parse tree produced by the {@code OrCondition}
 	 * labeled alternative in {@link SQLQueryParser#condition}.

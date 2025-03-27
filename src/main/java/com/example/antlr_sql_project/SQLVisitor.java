@@ -1,6 +1,10 @@
 package com.example.antlr_sql_project;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class SQLVisitor extends SQLQueryParserBaseVisitor<String> {
+    private String mainTable;
 
     @Override
     public String visitTableName(SQLQueryParser.TableNameContext ctx) {
@@ -9,27 +13,55 @@ public class SQLVisitor extends SQLQueryParserBaseVisitor<String> {
 
     @Override
     public String visitQuery(SQLQueryParser.QueryContext ctx) {
-        String selectClause = visitSelectClause(ctx.selectClause());
         String tableName = ctx.tableName().getText();
+        mainTable = tableName;
+        String selectClause = visitSelectClause(ctx.selectClause());
+        String joinClause = ctx.joinClause() != null ? visitJoinClause(ctx.joinClause()) : "";
         String whereClause = ctx.condition() != null ? " WHERE " + visitCondition(ctx.condition()) : "";
 
-        return String.format("SELECT %s FROM %s%s", selectClause, tableName, whereClause).trim();
+        if (ctx.joinClause() != null) {
+            mainTable = ctx.joinClause().tableName().getText();
+            String selectFromJoinClause = ", " + visitSelectFromJoin(ctx.joinClause());
+            return String.format("SELECT %s%s FROM %s%s%s", selectClause, selectFromJoinClause, tableName, joinClause, whereClause).trim();
+        }
+
+        return String.format("SELECT %s FROM %s%s%s", selectClause, tableName, joinClause, whereClause).trim();
     }
 
     @Override
     public String visitSelectClause(SQLQueryParser.SelectClauseContext ctx) {
-        if (ctx.function() != null) {
-            return visit(ctx.function());
-        } else if (ctx.columnList() != null) {
-            StringBuilder columns = new StringBuilder();
-            for (SQLQueryParser.ColumnContext columnCtx : ctx.columnList().column()) {
-                columns.append(columnCtx.getText()).append(", ");
-            }
-            return columns.length() > 0 ? columns.substring(0, columns.length() - 2) : ""; // Usuwa ostatni przecinek
-        } else if (ctx.WSZYSTKO() != null) {
-            return "*";
+        if (ctx.WSZYSTKO() != null) {
+            return "*";  // Zamiana * na wszystkie kolumny
+        } else {
+            return visitColumnList(ctx.columnList());
         }
-        return "";
+    }
+
+    @Override
+    public String visitColumnList(SQLQueryParser.ColumnListContext ctx) {
+        List<String> columns = new ArrayList<>();
+        for (SQLQueryParser.ColumnContext columnContext : ctx.column()) {
+            columns.add(mainTable + "." + columnContext.getText());
+        }
+        return String.join(", ", columns);
+    }
+
+    public String visitSelectFromJoin(SQLQueryParser.JoinClauseContext ctx) {
+        return visitSelectClause(ctx.selectClause());
+    }
+
+    @Override
+    public String visitJoinClause(SQLQueryParser.JoinClauseContext ctx) {
+        String tableName = ctx.tableName().getText();
+        String condition = visitCondition(ctx.condition());
+        return " JOIN " + tableName + " ON " + condition;
+    }
+
+    @Override
+    public String visitOnOperator(SQLQueryParser.OnOperatorContext ctx) {
+        return ctx.tableName(0).getText() + "." + ctx.column(0).getText() + " " +
+                ctx.OPERATOR().getText() + " " +
+                ctx.tableName(1).getText() + "." + ctx.column(1).getText();
     }
 
     @Override
@@ -46,6 +78,8 @@ public class SQLVisitor extends SQLQueryParserBaseVisitor<String> {
             return visitAndCondition((SQLQueryParser.AndConditionContext) ctx);
         } else if (ctx instanceof SQLQueryParser.OrConditionContext) {
             return visitOrCondition((SQLQueryParser.OrConditionContext) ctx);
+        } else if (ctx instanceof SQLQueryParser.OnOperatorContext) {
+            return visitOnOperator((SQLQueryParser.OnOperatorContext) ctx);
         }
         return "";
     }

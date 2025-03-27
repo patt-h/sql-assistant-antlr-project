@@ -41,6 +41,18 @@ public class SQLQueryParserBaseListener implements SQLQueryParserListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
+	@Override public void enterJoinClause(SQLQueryParser.JoinClauseContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitJoinClause(SQLQueryParser.JoinClauseContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
 	@Override public void enterColumnList(SQLQueryParser.ColumnListContext ctx) { }
 	/**
 	 * {@inheritDoc}
@@ -96,6 +108,18 @@ public class SQLQueryParserBaseListener implements SQLQueryParserListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitSimpleCondition(SQLQueryParser.SimpleConditionContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterOnOperator(SQLQueryParser.OnOperatorContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitOnOperator(SQLQueryParser.OnOperatorContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *

@@ -23,6 +23,12 @@ public interface SQLQueryParserVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitSelectClause(SQLQueryParser.SelectClauseContext ctx);
 	/**
+	 * Visit a parse tree produced by {@link SQLQueryParser#joinClause}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitJoinClause(SQLQueryParser.JoinClauseContext ctx);
+	/**
 	 * Visit a parse tree produced by {@link SQLQueryParser#columnList}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
@@ -53,6 +59,13 @@ public interface SQLQueryParserVisitor<T> extends ParseTreeVisitor<T> {
 	 * @return the visitor result
 	 */
 	T visitSimpleCondition(SQLQueryParser.SimpleConditionContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code OnOperator}
+	 * labeled alternative in {@link SQLQueryParser#condition}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitOnOperator(SQLQueryParser.OnOperatorContext ctx);
 	/**
 	 * Visit a parse tree produced by the {@code OrCondition}
 	 * labeled alternative in {@link SQLQueryParser#condition}.

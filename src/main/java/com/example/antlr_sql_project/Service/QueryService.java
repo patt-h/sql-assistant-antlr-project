@@ -1,6 +1,5 @@
 package com.example.antlr_sql_project.Service;
 
-import com.example.antlr_sql_project.ColumnMapperLexer;
 import com.example.antlr_sql_project.SQLQueryLexer;
 import com.example.antlr_sql_project.SQLQueryParser;
 import com.example.antlr_sql_project.SQLVisitor;
@@ -24,21 +23,8 @@ public class QueryService {
     private final EntityManager entityManager;
 
     public List<Map<String, Object>> processQuery(String userQuery) {
-        // Zamiana polskich nazw kolumn
         CharStream input = CharStreams.fromString(userQuery);
-        ColumnMapperLexer lexer = new ColumnMapperLexer(input);
-        CommonTokenStream tokens = new CommonTokenStream(lexer);
-        tokens.fill();
-
-        // Tworzenie nowego zapytania SQL
-        StringBuilder mappedQuery = new StringBuilder();
-        for (Token token : tokens.getTokens()) {
-            mappedQuery.append(token.getText()).append(" ");
-        }
-
-        // Parsowanie SQL po mapowaniu
-        CharStream mappedInput = CharStreams.fromString(mappedQuery.toString().trim());
-        SQLQueryLexer sqlLexer = new SQLQueryLexer(mappedInput);
+        SQLQueryLexer sqlLexer = new SQLQueryLexer(input);
         CommonTokenStream sqlTokens = new CommonTokenStream(sqlLexer);
         SQLQueryParser parser = new SQLQueryParser(sqlTokens);
         SQLQueryParser.QueryContext tree = parser.query();
