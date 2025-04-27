@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <title>Asystent użytkownika bazy danych</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<h1>Asystent użytkownika bazy danych</h1>
+<input id="queryInput" type="text" placeholder="Wpisz zapytanie..." autocomplete="off">
+<div id="suggestions"></div>
+<button onclick="sendQuery()">Wyślij</button>
+
+<div class="content">
+    <div class="tables-info">
+        <h2>Dostępne tabele i kolumny</h2>
+
+        <div class="table">
+            <h3>klienci</h3>
+            <ul>
+                <li>id</li>
+                <li>imie</li>
+                <li>nazwisko</li>
+                <li>email</li>
+            </ul>
+        </div>
+
+        <div class="table">
+            <h3>zamowienia</h3>
+            <ul>
+                <li>id</li>
+                <li>klient_id</li>
+                <li>data_zamowienia</li>
+                <li>kwota</li>
+            </ul>
+        </div>
+
+        <div class="table">
+            <h3>produkty</h3>
+            <ul>
+                <li>id</li>
+                <li>nazwa</li>
+                <li>kategoria</li>
+                <li>cena</li>
+            </ul>
+        </div>
+
+        <div class="table">
+            <h3>szczegoly_zamowienia</h3>
+            <ul>
+                <li>id</li>
+                <li>zamowienie_id</li>
+                <li>produkt_id</li>
+                <li>ilosc</li>
+                <li>cena</li>
+            </ul>
+        </div>
+    </div>
+
+    <div id="result-section">
+        <h2>Wynik zapytania</h2>
+        <div id="result"></div>
+    </div>
+</div>
+
+<script src="script.js"></script>
+
+</body>
+</html>

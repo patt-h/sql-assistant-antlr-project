@@ -48,12 +48,4 @@ public class QueryService {
 
         return formattedResults;
     }
-
-    @SuppressWarnings("unchecked")
-    public List<String> getColumnNames(String tableName) {
-        return (List<String>) entityManager.createNativeQuery(
-                "SELECT column_name FROM information_schema.columns WHERE table_name = :table"
-        ).setParameter("table", tableName).getResultList();
-    }
-
 }

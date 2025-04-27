@@ -10,9 +10,9 @@ public class SQLVisitor extends SQLQueryParserBaseVisitor<String> {
     public String visitQuery(SQLQueryParser.QueryContext ctx) {
         String mainTableName = ctx.tableName().getText();
         tableName = mainTableName;
-        String selectClause = visitSelectClause(ctx.selectClause());
-        String joinClause = ctx.joinClause() != null ? visitJoinClause(ctx.joinClause()) : "";
-        String whereClause = ctx.condition() != null ? " WHERE " + visitCondition(ctx.condition()) : "";
+        String selectClause = visit(ctx.selectClause());
+        String joinClause = ctx.joinClause() != null ? visit(ctx.joinClause()) : "";
+        String whereClause = ctx.condition() != null ? " WHERE " + visit(ctx.condition()) : "";
 
         if (ctx.joinClause() != null) {
             tableName = ctx.joinClause().tableName().getText();
@@ -33,7 +33,7 @@ public class SQLVisitor extends SQLQueryParserBaseVisitor<String> {
         if (ctx.WSZYSTKO() != null) {
             return tableName + ".*";
         } else {
-            return visitColumnList(ctx.columnList());
+            return visit(ctx.columnList());
         }
     }
 
@@ -84,12 +84,12 @@ public class SQLVisitor extends SQLQueryParserBaseVisitor<String> {
 
     @Override
     public String visitAndCondition(SQLQueryParser.AndConditionContext ctx) {
-        return visitCondition(ctx.condition(0)) + " AND " + visitCondition(ctx.condition(1));
+        return visit(ctx.condition(0)) + " AND " + visitCondition(ctx.condition(1));
     }
 
     @Override
     public String visitOrCondition(SQLQueryParser.OrConditionContext ctx) {
-        return visitCondition(ctx.condition(0)) + " OR " + visitCondition(ctx.condition(1));
+        return visit(ctx.condition(0)) + " OR " + visitCondition(ctx.condition(1));
     }
 
     @Override
