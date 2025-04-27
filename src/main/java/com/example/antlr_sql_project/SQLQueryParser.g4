@@ -8,7 +8,7 @@ selectClause: function | columnList | WSZYSTKO;
 joinClause: DODAJ selectClause Z tableName ON condition;
 columnList: column (COMMA column)*;
 function: (SUM | AVG | COUNT | MAX | MIN) LPAREN column RPAREN;
-column: WORD;
+column: WORD | WORD DOT WORD | function;
 tableName: WORD;
 condition:
     column OPERATOR value                                   # SimpleCondition
