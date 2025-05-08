@@ -63,7 +63,7 @@ public class SQLVisitor extends SQLQueryParserBaseVisitor<String> {
     }
 
     public String visitSelectFromJoin(SQLQueryParser.JoinClauseContext ctx) {
-        return visitSelectClause(ctx.selectClause());
+        return visit(ctx.selectClause());
     }
 
     @Override
@@ -115,16 +115,16 @@ public class SQLVisitor extends SQLQueryParserBaseVisitor<String> {
     @Override
     public String visitAndCondition(SQLQueryParser.AndConditionContext ctx) {
         ST andConditionTemplate = new ST("(<left>) AND (<right>)");
-        andConditionTemplate.add("left", visitCondition(ctx.condition(0)));
-        andConditionTemplate.add("right", visitCondition(ctx.condition(1)));
+        andConditionTemplate.add("left", visit(ctx.condition(0)));
+        andConditionTemplate.add("right", visit(ctx.condition(1)));
         return andConditionTemplate.render();
     }
 
     @Override
     public String visitOrCondition(SQLQueryParser.OrConditionContext ctx) {
         ST orConditionTemplate = new ST("(<left>) OR (<right>)");
-        orConditionTemplate.add("left", visitCondition(ctx.condition(0)));
-        orConditionTemplate.add("right", visitCondition(ctx.condition(1)));
+        orConditionTemplate.add("left", visit(ctx.condition(0)));
+        orConditionTemplate.add("right", visit(ctx.condition(1)));
         return orConditionTemplate.render();
     }
 
