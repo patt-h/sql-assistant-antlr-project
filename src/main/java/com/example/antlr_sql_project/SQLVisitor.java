@@ -90,19 +90,6 @@ public class SQLVisitor extends SQLQueryParserBaseVisitor<String> {
         return functionTemplate.render();
     }
 
-    public String visitCondition(SQLQueryParser.ConditionContext ctx) {
-        if (ctx instanceof SQLQueryParser.SimpleConditionContext) {
-            return visitSimpleCondition((SQLQueryParser.SimpleConditionContext) ctx);
-        } else if (ctx instanceof SQLQueryParser.AndConditionContext) {
-            return visitAndCondition((SQLQueryParser.AndConditionContext) ctx);
-        } else if (ctx instanceof SQLQueryParser.OrConditionContext) {
-            return visitOrCondition((SQLQueryParser.OrConditionContext) ctx);
-        } else if (ctx instanceof SQLQueryParser.OnOperatorContext) {
-            return visitOnOperator((SQLQueryParser.OnOperatorContext) ctx);
-        }
-        return "";
-    }
-
     @Override
     public String visitSimpleCondition(SQLQueryParser.SimpleConditionContext ctx) {
         ST simpleConditionTemplate = new ST("<column> <operator> <value>");
